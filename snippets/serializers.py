@@ -9,6 +9,11 @@ class SnippetSerializer(serializers.ModelSerializer):
         model = Snippet
         fields = ['id', 'title', 'code', 'linenos', 'language', 'style', 'owner',]
 
+    def validate_title(self, value):
+        if len(value) < 5:
+            raise serializers.ValidationError("The title's length must be greater than or equal to 5")
+        return value
+
 
 class UserSerializer(serializers.ModelSerializer):
     snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
